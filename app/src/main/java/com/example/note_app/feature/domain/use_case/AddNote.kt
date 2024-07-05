@@ -8,7 +8,11 @@ class AddNote (
 ){
     suspend operator fun invoke(note: Note){
         if(note.title.isBlank()){
-            
+
+
+
+
+
         }
     }
 }
