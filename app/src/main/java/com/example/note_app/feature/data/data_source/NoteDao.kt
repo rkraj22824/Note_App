@@ -17,7 +17,7 @@ interface NoteDao {
     @Query("SELECT * FROM note WHERE id= :id")
     suspend fun getNoteById(id: Int):Note?  // to get specific note by id
 
-     @Insert(onConflict = OnConflictStrategy.REPLACE)   // to insert the note if already exists then
+    @Insert(onConflict = OnConflictStrategy.REPLACE)   // to insert the note if already exists then
     suspend fun insertNote(note: Note)                  // gonna replace  with the help of id
                                                         // now no need to add another function for updating note
     @Delete
