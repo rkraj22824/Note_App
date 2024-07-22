@@ -12,13 +12,13 @@ import com.example.note_app.ui.theme.Violet
 @Entity
 data class Note(
     val title: String,
+    val content: String,
     val timestamp: Long,
     val color: Int,
-    val content: String,
     @PrimaryKey val id:Int?=null
 ){
     companion object{
-        val NoteColors= listOf(RedOrange, LightGreen, Violet, BabyBlue, RedPink)
+        val noteColors= listOf(RedOrange, LightGreen, Violet, BabyBlue, RedPink)
     }
 }
 

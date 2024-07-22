@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.note_app.feature.presentation.notes.components.NoteItem
+import com.example.note_app.feature.presentation.util.Screen
 import com.plcoding.cleanarchitecturenoteapp.feature_note.presentation.notes.components.OrderSection
 import kotlinx.coroutines.launch
 
@@ -52,42 +54,42 @@ fun NotesScreen(
     viewModel: NotesViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
-//    var scaffoldState = remember{}
-    val scope = rememberCoroutineScope()
-
+    val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-
-                }
+                    navController.navigate(Screen.AddEditNoteScreen.route)
+                },
+                containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "To Add Note"
                 )
             }
-//            scaffoldState=scaffoldState
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
 
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
+
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Your note")
+                Text(text = "Your note",
+                    style = MaterialTheme.typography.headlineMedium)
                 IconButton(onClick = {
                     viewModel.onEvent(NotesEvent.ToggleOrderSection)
                 }) {
-                    @androidx.compose.runtime.Composable {
-                        Icon(imageVector = Icons.Default.Sort, contentDescription = "Sort")
-                    }
+                    Icon(imageVector = Icons.Default.Sort,
+                        contentDescription ="Sort")
                 }
             }
             AnimatedVisibility(
@@ -110,14 +112,18 @@ fun NotesScreen(
                 modifier = Modifier
                     .fillMaxSize()) {
                 items(state.notes){note->
-                    NoteItem(note = note,
-                        modifier = Modifier.fillMaxWidth()
-                            .clickable{
-
+                    NoteItem(
+                        note = note,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                navController.navigate(
+                                    Screen.AddEditNoteScreen.route +
+                                            "?noteId=${note.id}&noteColor=${note.color}"
+                                )
                             },
                         onDeleteClick = {
                             viewModel.onEvent(NotesEvent.DeleteNote(note))
-
                         }
                     )
                 }

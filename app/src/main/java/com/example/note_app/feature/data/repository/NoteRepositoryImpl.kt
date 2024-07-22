@@ -1,8 +1,8 @@
 package com.example.note_app.feature.data.repository
 
-import com.example.note_app.feature.data.data_source.NoteDao
 import com.example.note_app.feature.domain.model.Note
 import com.example.note_app.feature.domain.repository.NoteRepository
+import com.plcoding.cleanarchitecturenoteapp.feature_note.data.data_source.NoteDao
 import kotlinx.coroutines.flow.Flow
 
 class NoteRepositoryImpl(

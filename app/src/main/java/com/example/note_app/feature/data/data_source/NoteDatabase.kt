@@ -1,8 +1,14 @@
 package com.example.note_app.feature.data.data_source
 
+import androidx.room.Dao
 import androidx.room.Database
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.RoomDatabase
+import androidx.room.Update
 import com.example.note_app.feature.domain.model.Note
+import com.plcoding.cleanarchitecturenoteapp.feature_note.data.data_source.NoteDao
 
 
 @Database(
@@ -11,9 +17,13 @@ import com.example.note_app.feature.domain.model.Note
 )
 abstract class NoteDatabase : RoomDatabase(){
 
-    abstract val noteDao: NoteDao
+abstract val noteDao: NoteDao
 
     companion object{
         const val DATABASE_NAME="notes_db"
     }
 }
+
+
+
+

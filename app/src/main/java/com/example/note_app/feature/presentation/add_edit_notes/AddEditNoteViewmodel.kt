@@ -33,7 +33,7 @@ class AddEditNoteViewmodel @Inject constructor(
     ))
     val noteContent: State<NoteTextFieldState> = _noteContent
 
-    private val _noteColor = mutableStateOf(Note.NoteColors.random().toArgb())
+    private val _noteColor = mutableStateOf(Note.noteColors.random().toArgb())
     val noteColor: State<Int> = _noteColor
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -80,7 +80,7 @@ class AddEditNoteViewmodel @Inject constructor(
                     text = event.value
                 )
             }
-            is AddEditNoteEvent.ChangeContetnFocus ->{
+            is AddEditNoteEvent.ChangeContentFocus ->{
                 _noteContent.value=_noteContent.value.copy(
                     isHintVisible = !event.focusState.isFocused
                             && _noteContent.value.text.isBlank()
@@ -118,6 +118,4 @@ class AddEditNoteViewmodel @Inject constructor(
         data class ShowSnackbar( val message: String):UiEvent()
         object SaveNote : UiEvent()
     }
-
-
 }
