@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -30,13 +31,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-          Surface {
+          Surface(
+              color = MaterialTheme.colorScheme.background
+          ) {
               val navController = rememberNavController()
               NavHost(navController = navController, startDestination = Screen.NoteScreen.route ) {
                  composable(route=Screen.NoteScreen.route){
                      NotesScreen(navController = navController)
                  }
-                  composable(route=Screen.AddEditNoteScreen.route + "?noteId ={noteId}&noteColor={noteColor}",
+                  composable(route=Screen.AddEditNoteScreen.route + "?noteId={noteId}&noteColor={noteColor}",
                       arguments = listOf(
                           navArgument(name = "noteId"){
                               type =NavType.IntType

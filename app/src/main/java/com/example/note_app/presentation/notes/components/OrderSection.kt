@@ -24,7 +24,8 @@ fun OrderSection(
             DefaultRadioButton(
                 text = "Title",
                 selected = noteOrder is NoteOrder.Title,
-                onSelect = { onOrderChange(NoteOrder.Title(noteOrder.orderType)) }
+                onSelect = {
+                    onOrderChange(NoteOrder.Title(noteOrder.orderType)) }
             )
             Spacer(modifier = Modifier.width(8.dp))
             DefaultRadioButton(

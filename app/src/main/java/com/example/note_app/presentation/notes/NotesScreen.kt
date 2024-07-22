@@ -28,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
@@ -35,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,14 +56,18 @@ fun NotesScreen(
     viewModel: NotesViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
+    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    var color by remember {
+        mutableStateOf(Color.Transparent)
+    }
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
                     navController.navigate(Screen.AddEditNoteScreen.route)
                 },
-                containerColor = MaterialTheme.colorScheme.primary
+
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -69,7 +75,8 @@ fun NotesScreen(
                 )
             }
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+
 
     ) {
         Column(
@@ -83,13 +90,17 @@ fun NotesScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Your note",
-                    style = MaterialTheme.typography.headlineMedium)
+                Text(
+                    text = "Your note",
+                    style = MaterialTheme.typography.headlineMedium
+                )
                 IconButton(onClick = {
                     viewModel.onEvent(NotesEvent.ToggleOrderSection)
                 }) {
-                    Icon(imageVector = Icons.Default.Sort,
-                        contentDescription ="Sort")
+                    Icon(
+                        imageVector = Icons.Default.Sort,
+                        contentDescription = "Sort"
+                    )
                 }
             }
             AnimatedVisibility(
@@ -110,8 +121,9 @@ fun NotesScreen(
             Spacer(modifier = Modifier.height(16.dp))
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()) {
-                items(state.notes){note->
+                    .fillMaxSize()
+            ) {
+                items(state.notes) { note ->
                     NoteItem(
                         note = note,
                         modifier = Modifier
@@ -124,8 +136,18 @@ fun NotesScreen(
                             },
                         onDeleteClick = {
                             viewModel.onEvent(NotesEvent.DeleteNote(note))
+                            scope.launch {
+                                val result = snackbarHostState.showSnackbar(
+                                    message = "Note Deleted",
+                                    actionLabel = "Undo"
+                                )
+                                if (result == SnackbarResult.ActionPerformed) {
+                                    viewModel.onEvent(NotesEvent.RestoreNote)
+                                }
+                            }
                         }
                     )
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }

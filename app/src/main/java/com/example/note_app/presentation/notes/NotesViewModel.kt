@@ -54,6 +54,13 @@ class NotesViewModel @Inject constructor(
      isOrderSectionVisible = !state.value.isOrderSectionVisible
     )
    }
+
+   NotesEvent.RestoreNote ->{
+    viewModelScope.launch {
+     noteUseCases.addNote(recentlyDeleteNote ?: return@launch)
+     recentlyDeleteNote = null
+    }
+   }
   }
  }
 
